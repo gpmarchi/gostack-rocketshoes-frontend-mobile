@@ -1,14 +1,28 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import {View, Text} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text } from 'react-native';
 
 import './config/ReactotronConfig';
 
-const App = () => {
-  console.tron.log('hello tron');
+function HomeScreen() {
   return (
-    <View>
-      <Text>Welcome to React Native!!!</Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
     </View>
+  );
+}
+
+const App = () => {
+  const Stack = createStackNavigator();
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
