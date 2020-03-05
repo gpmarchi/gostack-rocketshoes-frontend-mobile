@@ -1,16 +1,18 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { Text, Button } from 'react-native';
 import PropTypes from 'prop-types';
+
+import { Container } from './styles';
 
 export default function Home({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <Container>
       <Text>Home</Text>
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Cart')}
       />
-    </View>
+    </Container>
   );
 }
 
