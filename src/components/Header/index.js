@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { Wrapper, Container, Logo } from './styles';
+import { Wrapper, Container, Logo, Cart } from './styles';
 
 import logo from '../../assets/logo.png';
 
@@ -10,7 +10,9 @@ export default function Header() {
     <Wrapper>
       <Container>
         <Logo source={logo} />
-        <Icon name="shopping-basket" size={30} color="#FFF" />
+        <Cart>
+          <Icon name="shopping-basket" size={30} color="#FFF" />
+        </Cart>
       </Container>
     </Wrapper>
   );

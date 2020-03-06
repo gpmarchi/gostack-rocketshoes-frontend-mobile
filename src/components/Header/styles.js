@@ -13,7 +13,11 @@ export const Container = styled.View`
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  height: 50px;
+  height: 70px;
 `;
 
-export const Logo = styled.Image``;
+export const Logo = styled.Image.attrs({
+  resizeMode: 'cover',
+})``;
+
+export const Cart = styled.TouchableOpacity``;
