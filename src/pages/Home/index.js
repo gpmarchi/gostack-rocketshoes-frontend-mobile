@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { FlatList } from 'react-native';
 
 import {
   Container,
@@ -13,31 +12,59 @@ import {
   CartAmount,
   CartAmountText,
   AddButtonText,
+  ProductList,
 } from './styles';
 
-export default function Home({ navigation }) {
-  // onPress={() => navigation.navigate('Cart')}
-  return (
-    <Container>
-      <Product>
-        <ProductImage
-          source={{
-            uri:
-              'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg',
-          }}
+import api from '../../services/api';
+import { formatPrice } from '../../util/format';
+
+export default class Home extends Component {
+  state = {
+    products: [],
+  };
+
+  async componentDidMount() {
+    const response = await api.get('/products');
+
+    const data = response.data.map(product => ({
+      ...product,
+      formattedPrice: formatPrice(product.price),
+    }));
+
+    this.setState({ products: data });
+  }
+
+  render() {
+    const { navigation } = this.props;
+    const { products } = this.state;
+
+    return (
+      <Container>
+        <ProductList
+          data={products}
+          keyExtractor={product => String(product.id)}
+          renderItem={({ item }) => (
+            <Product>
+              <ProductImage
+                source={{
+                  uri: item.image,
+                }}
+              />
+              <ProductTitle>{item.title}</ProductTitle>
+              <ProductPrice>{item.formattedPrice}</ProductPrice>
+              <AddButton onPress={() => navigation.navigate('Cart')}>
+                <CartAmount>
+                  <Icon name="add-shopping-cart" size={20} color="#FFF" />
+                  <CartAmountText>3</CartAmountText>
+                </CartAmount>
+                <AddButtonText>ADICIONAR</AddButtonText>
+              </AddButton>
+            </Product>
+          )}
         />
-        <ProductTitle>Tênis de Caminhada Leve Confortável</ProductTitle>
-        <ProductPrice>R$ 129,90</ProductPrice>
-        <AddButton onPress={() => navigation.navigate('Cart')}>
-          <CartAmount>
-            <Icon name="add-shopping-cart" size={30} color="#FFF" />
-            <CartAmountText>3</CartAmountText>
-          </CartAmount>
-          <AddButtonText>ADICIONAR</AddButtonText>
-        </AddButton>
-      </Product>
-    </Container>
-  );
+      </Container>
+    );
+  }
 }
 
 Home.propTypes = {

@@ -11,6 +11,7 @@ export const Product = styled.View`
   border-radius: 4px;
   padding: 10px;
   width: 220px;
+  margin: 10px;
 `;
 
 export const ProductImage = styled.Image`
@@ -25,8 +26,9 @@ export const ProductTitle = styled.Text`
 
 export const ProductPrice = styled.Text`
   font-weight: bold;
-  font-size: 21px;
+  font-size: 20px;
   margin: 14px 0;
+  margin-top: auto;
 `;
 
 export const AddButton = styled.TouchableOpacity`
@@ -34,6 +36,7 @@ export const AddButton = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   border-radius: 4px;
+  margin-top: auto;
 `;
 
 export const CartAmount = styled.View`
@@ -55,4 +58,12 @@ export const AddButtonText = styled.Text`
   font-weight: bold;
   flex: 1;
   text-align: center;
+`;
+
+export const ProductList = styled.FlatList.attrs({
+  showsHorizontalScrollIndicator: false,
+  horizontal: true,
+})`
+  margin: 90px 10px 0 10px;
+  max-height: 400px;
 `;
