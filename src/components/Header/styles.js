@@ -20,4 +20,19 @@ export const Logo = styled.Image.attrs({
   resizeMode: 'cover',
 })``;
 
+export const CartContainer = styled.View`
+  flex-direction: row;
+`;
+
 export const Cart = styled.TouchableOpacity``;
+
+export const CartAmount = styled.Text`
+  background: #7159c1;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`;
