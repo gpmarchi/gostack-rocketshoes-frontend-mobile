@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import {
   Container,
@@ -25,7 +26,9 @@ import {
   OrderText,
 } from './styles';
 
-function Cart({ cart, dispatch }) {
+import * as CartActions from '../../store/modules/cart/actions';
+
+function Cart({ cart, removeFromCart }) {
   return (
     <Container>
       <Products>
@@ -41,11 +44,7 @@ function Cart({ cart, dispatch }) {
                 <ProductTitle>{product.title}</ProductTitle>
                 <ProductPrice>{product.formattedPrice}</ProductPrice>
               </ProductDetails>
-              <ProductDelete
-                onPress={() =>
-                  dispatch({ type: 'REMOVE_FROM_CART', id: product.id })
-                }
-              >
+              <ProductDelete onPress={() => removeFromCart(product.id)}>
                 <Icon name="delete-forever" size={30} color="#7159c1" />
               </ProductDelete>
             </ProductInfo>
@@ -80,12 +79,15 @@ function Cart({ cart, dispatch }) {
 }
 
 Cart.propTypes = {
-  cart: PropTypes.shape().isRequired,
-  dispatch: PropTypes.func.isRequired,
+  cart: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  removeFromCart: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
