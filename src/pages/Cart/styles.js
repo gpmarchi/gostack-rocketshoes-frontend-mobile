@@ -116,3 +116,17 @@ export const OrderText = styled.Text`
   font-size: 14px;
   text-align: center;
 `;
+
+export const EmptyCart = styled.View`
+  background: #fff;
+  margin: 90px 15px;
+  border-radius: 4px;
+  padding: 10px;
+  align-items: center;
+`;
+
+export const EmptyText = styled.Text`
+  font-weight: bold;
+  font-size: 25px;
+  margin-top: 10px;
+`;

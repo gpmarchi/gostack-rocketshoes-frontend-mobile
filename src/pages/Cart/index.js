@@ -24,6 +24,8 @@ import {
   Total,
   OrderButton,
   OrderText,
+  EmptyCart,
+  EmptyText,
 } from './styles';
 
 import * as CartActions from '../../store/modules/cart/actions';
@@ -40,49 +42,56 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
 
   return (
     <Container>
-      <Products>
-        {cart.map(product => (
-          <Product key={String(product.id)}>
-            <ProductInfo>
-              <ProductImage
-                source={{
-                  uri: product.image,
-                }}
-              />
-              <ProductDetails>
-                <ProductTitle>{product.title}</ProductTitle>
-                <ProductPrice>{product.formattedPrice}</ProductPrice>
-              </ProductDetails>
-              <ProductDelete onPress={() => removeFromCart(product.id)}>
-                <Icon name="delete-forever" size={30} color="#7159c1" />
-              </ProductDelete>
-            </ProductInfo>
-            <ProductControls>
-              <AmountControls>
-                <AmountControlButton onPress={() => decrementAmount(product)}>
-                  <Icon
-                    name="remove-circle-outline"
-                    size={25}
-                    color="#7159c1"
-                  />
-                </AmountControlButton>
-                <ProductAmount value={String(product.amount)} />
-                <AmountControlButton onPress={() => incrementAmount(product)}>
-                  <Icon name="add-circle-outline" size={25} color="#7159c1" />
-                </AmountControlButton>
-              </AmountControls>
-              <ProductSubtotal>{product.subtotal}</ProductSubtotal>
-            </ProductControls>
-          </Product>
-        ))}
-        <CartTotal>
-          <TotalText>TOTAL</TotalText>
-          <Total>{total}</Total>
-          <OrderButton>
-            <OrderText>FINALIZAR PEDIDO</OrderText>
-          </OrderButton>
-        </CartTotal>
-      </Products>
+      {cart.length ? (
+        <Products>
+          {cart.map(product => (
+            <Product key={String(product.id)}>
+              <ProductInfo>
+                <ProductImage
+                  source={{
+                    uri: product.image,
+                  }}
+                />
+                <ProductDetails>
+                  <ProductTitle>{product.title}</ProductTitle>
+                  <ProductPrice>{product.formattedPrice}</ProductPrice>
+                </ProductDetails>
+                <ProductDelete onPress={() => removeFromCart(product.id)}>
+                  <Icon name="delete-forever" size={30} color="#7159c1" />
+                </ProductDelete>
+              </ProductInfo>
+              <ProductControls>
+                <AmountControls>
+                  <AmountControlButton onPress={() => decrementAmount(product)}>
+                    <Icon
+                      name="remove-circle-outline"
+                      size={25}
+                      color="#7159c1"
+                    />
+                  </AmountControlButton>
+                  <ProductAmount value={String(product.amount)} />
+                  <AmountControlButton onPress={() => incrementAmount(product)}>
+                    <Icon name="add-circle-outline" size={25} color="#7159c1" />
+                  </AmountControlButton>
+                </AmountControls>
+                <ProductSubtotal>{product.subtotal}</ProductSubtotal>
+              </ProductControls>
+            </Product>
+          ))}
+          <CartTotal>
+            <TotalText>TOTAL</TotalText>
+            <Total>{total}</Total>
+            <OrderButton>
+              <OrderText>FINALIZAR PEDIDO</OrderText>
+            </OrderButton>
+          </CartTotal>
+        </Products>
+      ) : (
+        <EmptyCart>
+          <Icon name="remove-shopping-cart" size={64} color="#eee" />
+          <EmptyText>Seu carrinho está vazio.</EmptyText>
+        </EmptyCart>
+      )}
     </Container>
   );
 }
