@@ -28,7 +28,15 @@ import {
 
 import * as CartActions from '../../store/modules/cart/actions';
 
-function Cart({ cart, removeFromCart }) {
+function Cart({ cart, removeFromCart, updateAmount }) {
+  function incrementAmount(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+
+  function decrementAmount(product) {
+    updateAmount(product.id, product.amount - 1);
+  }
+
   return (
     <Container>
       <Products>
@@ -50,7 +58,7 @@ function Cart({ cart, removeFromCart }) {
             </ProductInfo>
             <ProductControls>
               <AmountControls>
-                <AmountControlButton>
+                <AmountControlButton onPress={() => decrementAmount(product)}>
                   <Icon
                     name="remove-circle-outline"
                     size={25}
@@ -58,7 +66,7 @@ function Cart({ cart, removeFromCart }) {
                   />
                 </AmountControlButton>
                 <ProductAmount value={String(product.amount)} />
-                <AmountControlButton>
+                <AmountControlButton onPress={() => incrementAmount(product)}>
                   <Icon name="add-circle-outline" size={25} color="#7159c1" />
                 </AmountControlButton>
               </AmountControls>
@@ -81,6 +89,7 @@ function Cart({ cart, removeFromCart }) {
 Cart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   removeFromCart: PropTypes.func.isRequired,
+  updateAmount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
