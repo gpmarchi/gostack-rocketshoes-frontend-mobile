@@ -37,9 +37,9 @@ class Home extends Component {
     this.setState({ products: data });
   }
 
-  handleAddProduct(product) {
-    const { addToCart, navigation } = this.props;
-    addToCart(product);
+  handleAddProduct(id) {
+    const { addToCartRequest, navigation } = this.props;
+    addToCartRequest(id);
     navigation.navigate('Cart');
   }
 
@@ -61,7 +61,7 @@ class Home extends Component {
               />
               <ProductTitle>{item.title}</ProductTitle>
               <ProductPrice>{item.formattedPrice}</ProductPrice>
-              <AddButton onPress={() => this.handleAddProduct(item)}>
+              <AddButton onPress={() => this.handleAddProduct(item.id)}>
                 <CartAmount>
                   <Icon name="add-shopping-cart" size={20} color="#FFF" />
                   <CartAmountText>
@@ -90,7 +90,7 @@ const mapDispatchToProps = dispatch =>
 
 Home.propTypes = {
   navigation: PropTypes.shape({ navigate: PropTypes.func }).isRequired,
-  addToCart: PropTypes.func.isRequired,
+  addToCartRequest: PropTypes.func.isRequired,
   productCartAmount: PropTypes.shape().isRequired,
 };
 
