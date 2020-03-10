@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import api from '../../../services/api';
 import { addToCartSuccess, updateAmountSuccess } from './actions';
 import { formatPrice } from '../../../util/format';
+import { navigate } from '../../../services/navigation';
 
 function* addToCart({ id }) {
   const productExists = yield select(state =>
@@ -34,6 +35,8 @@ function* addToCart({ id }) {
     };
 
     yield put(addToCartSuccess(data));
+
+    navigate('Cart');
   }
 }
 
