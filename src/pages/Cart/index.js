@@ -27,8 +27,9 @@ import {
 } from './styles';
 
 import * as CartActions from '../../store/modules/cart/actions';
+import { formatPrice } from '../../util/format';
 
-function Cart({ cart, removeFromCart, updateAmount }) {
+function Cart({ cart, total, removeFromCart, updateAmount }) {
   function incrementAmount(product) {
     updateAmount(product.id, product.amount + 1);
   }
@@ -70,13 +71,13 @@ function Cart({ cart, removeFromCart, updateAmount }) {
                   <Icon name="add-circle-outline" size={25} color="#7159c1" />
                 </AmountControlButton>
               </AmountControls>
-              <ProductSubtotal>R$ 539.65</ProductSubtotal>
+              <ProductSubtotal>{product.subtotal}</ProductSubtotal>
             </ProductControls>
           </Product>
         ))}
         <CartTotal>
           <TotalText>TOTAL</TotalText>
-          <Total>R$ 1678,89</Total>
+          <Total>{total}</Total>
           <OrderButton>
             <OrderText>FINALIZAR PEDIDO</OrderText>
           </OrderButton>
@@ -88,12 +89,22 @@ function Cart({ cart, removeFromCart, updateAmount }) {
 
 Cart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  total: PropTypes.string.isRequired,
   removeFromCart: PropTypes.func.isRequired,
   updateAmount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  cart: state.cart,
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: formatPrice(product.amount * product.price),
+  })),
+  total: formatPrice(
+    state.cart.reduce(
+      (total, product) => total + product.amount * product.price,
+      0
+    )
+  ),
 });
 
 const mapDispatchToProps = dispatch =>
