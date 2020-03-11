@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   Container,
@@ -21,8 +19,17 @@ import api from '../../services/api';
 import { formatPrice } from '../../util/format';
 import * as CartActions from '../../store/modules/cart/actions';
 
-function Home({ addToCartRequest, productCartAmount }) {
+export default function Home() {
   const [products, setProducts] = useState([]);
+
+  const productCartAmount = useSelector(state =>
+    state.cart.reduce((productCartAmountSum, product) => {
+      productCartAmountSum[product.id] = product.amount;
+      return productCartAmountSum;
+    }, {})
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadProducts() {
@@ -40,14 +47,15 @@ function Home({ addToCartRequest, productCartAmount }) {
   }, []);
 
   function handleAddProduct(id) {
-    addToCartRequest(id);
+    dispatch(CartActions.addToCartRequest(id));
   }
 
   return (
     <Container>
       <ProductList
         data={products}
-        keyExtractor={product => String(product.id)}
+        extraData={productCartAmount}
+        keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
           <Product>
             <ProductImage
@@ -72,21 +80,3 @@ function Home({ addToCartRequest, productCartAmount }) {
     </Container>
   );
 }
-
-const mapStateToProps = state => ({
-  productCartAmount: state.cart.reduce((productCartAmount, product) => {
-    productCartAmount[product.id] = product.amount;
-    return productCartAmount;
-  }, {}),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-Home.propTypes = {
-  navigation: PropTypes.shape({ navigate: PropTypes.func }).isRequired,
-  addToCartRequest: PropTypes.func.isRequired,
-  productCartAmount: PropTypes.shape().isRequired,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
