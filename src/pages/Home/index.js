@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
@@ -21,60 +21,56 @@ import api from '../../services/api';
 import { formatPrice } from '../../util/format';
 import * as CartActions from '../../store/modules/cart/actions';
 
-class Home extends Component {
-  state = {
-    products: [],
-  };
+function Home({ addToCartRequest, productCartAmount }) {
+  const [products, setProducts] = useState([]);
 
-  async componentDidMount() {
-    const response = await api.get('/products');
+  useEffect(() => {
+    async function loadProducts() {
+      const response = await api.get('/products');
 
-    const data = response.data.map(product => ({
-      ...product,
-      formattedPrice: formatPrice(product.price),
-    }));
+      const data = response.data.map(product => ({
+        ...product,
+        formattedPrice: formatPrice(product.price),
+      }));
 
-    this.setState({ products: data });
-  }
+      setProducts(data);
+    }
 
-  handleAddProduct(id) {
-    const { addToCartRequest } = this.props;
+    loadProducts();
+  }, []);
+
+  function handleAddProduct(id) {
     addToCartRequest(id);
   }
 
-  render() {
-    const { products } = this.state;
-    const { productCartAmount } = this.props;
-
-    return (
-      <Container>
-        <ProductList
-          data={products}
-          keyExtractor={product => String(product.id)}
-          renderItem={({ item }) => (
-            <Product>
-              <ProductImage
-                source={{
-                  uri: item.image,
-                }}
-              />
-              <ProductTitle>{item.title}</ProductTitle>
-              <ProductPrice>{item.formattedPrice}</ProductPrice>
-              <AddButton onPress={() => this.handleAddProduct(item.id)}>
-                <CartAmount>
-                  <Icon name="add-shopping-cart" size={20} color="#FFF" />
-                  <CartAmountText>
-                    {productCartAmount[item.id] || 0}
-                  </CartAmountText>
-                </CartAmount>
-                <AddButtonText>ADICIONAR</AddButtonText>
-              </AddButton>
-            </Product>
-          )}
-        />
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <ProductList
+        data={products}
+        keyExtractor={product => String(product.id)}
+        renderItem={({ item }) => (
+          <Product>
+            <ProductImage
+              source={{
+                uri: item.image,
+              }}
+            />
+            <ProductTitle>{item.title}</ProductTitle>
+            <ProductPrice>{item.formattedPrice}</ProductPrice>
+            <AddButton onPress={() => handleAddProduct(item.id)}>
+              <CartAmount>
+                <Icon name="add-shopping-cart" size={20} color="#FFF" />
+                <CartAmountText>
+                  {productCartAmount[item.id] || 0}
+                </CartAmountText>
+              </CartAmount>
+              <AddButtonText>ADICIONAR</AddButtonText>
+            </AddButton>
+          </Product>
+        )}
+      />
+    </Container>
+  );
 }
 
 const mapStateToProps = state => ({
